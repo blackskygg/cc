@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"github.com/blackskygg/cc/parse"
-	"github.com/blackskygg/chaincode/config"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
 
@@ -14,8 +13,8 @@ type SimpleChaincode struct {
 }
 
 func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
-	conf, err := config.FromFile("init.conf")
-	conf.ApplyConfig(stub)
+	//	conf, err := config.FromFile("init.conf")
+	//	conf.ApplyConfig(stub)
 	return nil, err
 }
 
