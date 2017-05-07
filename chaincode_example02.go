@@ -15,7 +15,7 @@ type SimpleChaincode struct {
 func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	//	conf, err := config.FromFile("init.conf")
 	//	conf.ApplyConfig(stub)
-	return nil, err
+	return []byte{}, nil
 }
 
 func (t *SimpleChaincode) checkPermission(table_name, role string) error {
@@ -39,19 +39,19 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 		table_name := string(args[2])
 		var_name := string(args[3])
 		if err := t.checkPermission(table_name, role); err != nil {
-			return "Permission Denied!", err
+			return []byte("Permission Denied!"), err
 		}
 
 		key := strings.Join([]string{id, table_name, var_name}, "_")
-		stub.PutState(key, args[4])
+		stub.PutState(key, []byte(args[4]))
 		return nil, nil
 
 	case "del":
-		id := strings(args[1])
+		id := string(args[1])
 		table_name := string(args[2])
 		var_name := string(args[3])
 		if err := t.checkPermission(table_name, role); err != nil {
-			return "Permission Denied!", err
+			return []byte("Permission Denied!"), err
 		}
 
 		key := strings.Join([]string{id, table_name, var_name}, "_")
@@ -71,7 +71,8 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 		table_name := string(args[0])
 		var_name := string(args[1])
 		key := strings.Join([]string{table_name, var_name}, "_")
-		if ret, err := stub.GetState(key); err != nil {
+		ret, err := stub.GetState(key)
+		if err != nil {
 			return nil, errors.New("no such key")
 		}
 
@@ -81,6 +82,8 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 		var result string
 		var val bool
 		var err error
+		id := string(args[0])
+		expression := string(args[1])
 		if val, err = parse.Eval(expression, stub, id); err != nil {
 			return nil, err
 		}
