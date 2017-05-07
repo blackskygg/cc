@@ -4,7 +4,7 @@ import (
 	"regexp"
 	"strconv"
 
-	govaluate "github.com/blackskygg/chaincode/third/govaluate_modified"
+	govaluate "github.com/blackskygg/cc/third/govaluate_modified"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
 
