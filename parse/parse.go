@@ -18,6 +18,11 @@ func makeParameterMap(stub shim.ChaincodeStubInterface, exp, id string) (map[str
 
 	l := re.FindAllString(exp, -1)
 	for _, w := range l {
+		if w == "a_id" {
+			result[w] = id
+			continue
+		}
+
 		key := strings.Join([]string{id, w[2:]}, "_")
 		re, err := stub.GetState(key)
 		val, err := strconv.Atoi(string(re))
